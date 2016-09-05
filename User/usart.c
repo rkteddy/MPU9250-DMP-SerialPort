@@ -2,22 +2,6 @@
 #include "stm32f10x.h"
 #include "usart.h"
 
-int fputc(int ch, FILE *f)
-{
-		USART_SendData(USART1, (uint8_t) ch);
-
-		while (USART_GetFlagStatus(USART1, USART_FLAG_TC) == RESET) {}	
-		 
-		return ch;
-}
-
-int GetKey (void)  { 
-
-    while (!(USART1->SR & USART_FLAG_RXNE));
-
-    return ((int)(USART1->DR & 0x1FF));
-}
-
 /*
  * 串口输出配置
  */
