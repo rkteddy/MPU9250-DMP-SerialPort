@@ -7,3 +7,12 @@
 
 #define  SCL_read      GPIOB->IDR  & GPIO_Pin_6  
 #define  SDA_read      GPIOB->IDR  & GPIO_Pin_7  
+
+// IIC专用延时函数
+static void I2C_delay(void)
+{
+    volatile int i = 7;
+    while (i)
+
+    i--;
+}
