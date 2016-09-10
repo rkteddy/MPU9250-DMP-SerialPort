@@ -29,3 +29,19 @@ void I2CInit()
     GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_OD;
     GPIO_Init(GPIOB, &GPIO_InitStructure);
 }
+
+static bool I2C_Start()
+{
+    SDA_H;
+    SCL_H;
+    I2C_delay();
+    if (!SDA_read)
+        return false;
+    SDA_L;
+    I2C_delay();
+    if (SDA_read)
+        return false;
+    SDA_L;
+    I2C_delay();
+    return true;
+}
