@@ -45,3 +45,15 @@ static bool I2C_Start()
     I2C_delay();
     return true;
 }
+
+static void I2C_Stop()
+{
+    SCL_L;
+    I2C_delay();
+    SDA_L;
+    I2C_delay();
+    SCL_H;
+    I2C_delay();
+    SDA_H;
+    I2C_delay();
+}
