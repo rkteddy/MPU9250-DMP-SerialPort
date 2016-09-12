@@ -69,3 +69,32 @@ static void I2C_Ack()
     SCL_L;
     I2C_delay();
 }
+
+static void I2C_NoAck()
+{
+    SCL_L;
+    I2C_delay();
+    SDA_H;
+    I2C_delay();
+    SCL_H;
+    I2C_delay();
+    SCL_L;
+    I2C_delay();
+}
+
+static bool I2C_WaitAck()
+{
+    SCL_L;
+    I2C_delay();
+    SDA_H;
+    I2C_delay();
+    SCL_H;
+    I2C_delay();
+    if (SDA_read) 
+    {
+        SCL_L;
+        return false;
+    }
+    SCL_L;
+    return true;
+}
