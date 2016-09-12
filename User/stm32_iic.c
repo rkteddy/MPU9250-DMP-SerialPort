@@ -117,3 +117,25 @@ static void I2C_SendByte(uint8_t byte)
     }
     SCL_L;
 }
+
+static uint8_t I2C_ReceiveByte()
+{
+    uint8_t i = 8;
+    uint8_t byte = 0;
+
+    SDA_H;
+    while (i--)
+    {
+        byte <<= 1;
+        SCL_L;
+        I2C_delay();
+        SCL_H;
+        I2C_delay();
+        if (SDA_read) 
+        {
+            byte |= 0x01;
+        }
+    }
+    SCL_L;
+    return byte;
+}
