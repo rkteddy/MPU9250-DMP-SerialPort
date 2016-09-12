@@ -57,3 +57,15 @@ static void I2C_Stop()
     SDA_H;
     I2C_delay();
 }
+
+static void I2C_Ack()
+{
+    SCL_L;
+    I2C_delay();
+    SDA_L;
+    I2C_delay();
+    SCL_H;
+    I2C_delay();
+    SCL_L;
+    I2C_delay();
+}
