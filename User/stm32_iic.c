@@ -98,3 +98,22 @@ static bool I2C_WaitAck()
     SCL_L;
     return true;
 }
+
+static void I2C_SendByte(uint8_t byte)
+{
+    uint8_t i = 8;
+    while (i--) 
+    {
+        SCL_L;
+        I2C_delay();
+        if (byte & 0x80)
+            SDA_H;
+        else
+            SDA_L;
+        byte <<= 1;
+        I2C_delay();
+        SCL_H;
+        I2C_delay();
+    }
+    SCL_L;
+}
