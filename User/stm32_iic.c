@@ -139,3 +139,29 @@ static uint8_t I2C_ReceiveByte()
     SCL_L;
     return byte;
 }
+
+bool I2CWriteBuffer(uint8_t addr, uint8_t reg, uint8_t len, uint8_t * data)
+{
+    int i;
+    if (!I2C_Start())
+        return false;
+    I2C_SendByte(addr << 1 | I2C_Direction_Transmitter);
+    if (!I2C_WaitAck()) 
+    {
+        I2C_Stop();
+        return false;
+    }
+    I2C_SendByte(reg);
+    I2C_WaitAck();
+    for (i = 0; i < len; i++) 
+    {
+        I2C_SendByte(data[i]);
+        if (!I2C_WaitAck()) 
+        {
+            I2C_Stop();
+            return false;
+        }
+    }
+    I2C_Stop();
+    return true;
+}
