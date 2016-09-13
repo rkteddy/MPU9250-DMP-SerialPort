@@ -206,4 +206,33 @@ bool I2CWrite(uint8_t addr, uint8_t reg, uint8_t data)
     I2C_WaitAck();
     I2C_Stop();
     return true;
-}s
+}
+
+bool I2CRead(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *buf)
+{
+    if (!I2C_Start())
+        return false;
+    I2C_SendByte(addr << 1 | I2C_Direction_Transmitter);
+    if (!I2C_WaitAck()) 
+    {
+        I2C_Stop();
+        return false;
+    }
+    I2C_SendByte(reg);
+    I2C_WaitAck();
+    I2C_Start();
+    I2C_SendByte(addr << 1 | I2C_Direction_Receiver);
+    I2C_WaitAck();
+    while (len) 
+    {
+        *buf = I2C_ReceiveByte();
+        if (len == 1)
+            I2C_NoAck();
+        else
+            I2C_Ack();
+        buf++;
+        len--;
+    }
+    I2C_Stop();
+    return true;
+}
