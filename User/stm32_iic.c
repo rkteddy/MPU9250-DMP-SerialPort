@@ -189,3 +189,21 @@ int8_t I2Cread(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *buf)
 				return FALSE;
 		}
 }
+
+bool I2CWrite(uint8_t addr, uint8_t reg, uint8_t data)
+{
+    if (!I2C_Start())
+        return false;
+    I2C_SendByte(addr << 1 | I2C_Direction_Transmitter);
+    if (!I2C_WaitAck()) 
+    {
+        I2C_Stop();
+        return false;
+    }
+    I2C_SendByte(reg);
+    I2C_WaitAck();
+    I2C_SendByte(data);
+    I2C_WaitAck();
+    I2C_Stop();
+    return true;
+}s
