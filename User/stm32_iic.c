@@ -177,3 +177,15 @@ int8_t I2Cwrite(uint8_t addr, uint8_t reg, uint8_t len, uint8_t * data)
 				return FALSE;
 		}
 }
+
+int8_t I2Cread(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *buf)
+{
+		if(I2CRead(addr,reg,len,buf))
+		{
+				return TRUE;
+		}
+		else
+		{
+				return FALSE;
+		}
+}
