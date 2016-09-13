@@ -165,3 +165,15 @@ bool I2CWriteBuffer(uint8_t addr, uint8_t reg, uint8_t len, uint8_t * data)
     I2C_Stop();
     return true;
 }
+
+int8_t I2Cwrite(uint8_t addr, uint8_t reg, uint8_t len, uint8_t * data)
+{
+		if(I2CWriteBuffer(addr,reg,len,data))
+		{
+				return TRUE;
+		}
+		else
+		{
+				return FALSE;
+		}
+}
