@@ -17,9 +17,9 @@
 #define TRUE  0
 #define FALSE -1
 
-// 0表示写
+// 0±íê?D′
 #define	I2C_Direction_Transmitter   0
-//１表示读
+//￡±±íê??á
 #define	I2C_Direction_Receiver      1	 
 
 bool I2CWriteBuffer(uint8_t addr_, uint8_t reg_, uint8_t len_, uint8_t *data);
@@ -34,5 +34,3 @@ int8_t i2cwrite(uint8_t addr, uint8_t reg, uint8_t len, uint8_t * data);
 int8_t i2cread(uint8_t addr, uint8_t reg, uint8_t len, uint8_t *buf);
 
 #endif
-
-
