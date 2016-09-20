@@ -12,3 +12,6 @@ void delay_ms(u32 n)
 		while(n--)
 		delay_us(1000);
 }
+
+// 设置EEPROM的大小为1K
+u16 STMFLASH_BUFF[STMFLASH_SIZE];
