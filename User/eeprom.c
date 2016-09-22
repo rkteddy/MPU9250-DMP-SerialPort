@@ -67,3 +67,15 @@ void STMFLASH_Write_NoErase(void)
 		}
 
 }
+
+/*
+ * 从eeprom中读数据
+ */
+void STMFLASH_Read(u16 ReadAddr,u16 *pstr,u16 NumberToRead)
+{
+		u16 t;
+		for(t = 0; t < NumberToRead; t++)
+		{
+				*(pstr+t) = *(u16*)(FLASH_PAGE255_ADDR+ReadAddr+t*2);        
+		}
+}
