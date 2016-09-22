@@ -53,3 +53,17 @@ void STMFLASH_Read_Backup(void)
 				*(STMFLASH_BUFF+t) = *(u16*)(FLASH_PAGE255_ADDR+t*2);                
 		}
 }
+
+/*
+ * 将EEPROM的1K的数组写回到第255页
+ * 写数据前不擦除
+ */
+void STMFLASH_Write_NoErase(void)
+{
+		u16 t;
+		for(t = 0; t < STMFLASH_SIZE; t++)
+		{ 
+				FLASH_ProgramHalfWord(FLASH_PAGE255_ADDR+t*2,*(STMFLASH_BUFF+t));
+		}
+
+}
