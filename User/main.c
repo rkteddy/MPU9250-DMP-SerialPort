@@ -13,7 +13,22 @@
 
 int main(void)
 {  
-    
+    u16 count=0;  
+	
+	  // 串口初始化
+    USART_Config(); 
+	
+		// LED初始化
+    LED_Config();
+	
+    // IIC总线初始化
+    I2CInit();
+
+    // ADC初始化
+		ADC1_Init();
+
+    // 系统延时
+    delay_ms(10);
 }
 
 void USART1_IRQHandler()
