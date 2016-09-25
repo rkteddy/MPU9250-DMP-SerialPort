@@ -17,6 +17,11 @@ float Pitch,Roll,Yaw;
 // 四元数
 float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;
 
+// 方位矩阵
+static signed char gyro_orientation[9] = {-1, 0, 0,
+                                           0,-1, 0,
+                                           0, 0, 1};
+
 struct rx_s 
 {
     unsigned char header[3];
