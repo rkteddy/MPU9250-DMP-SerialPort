@@ -26,3 +26,12 @@ void USART1_IRQHandler()
 				printf( "%c", ch ); 
 		} 
 }
+
+void DMA1_Channel1_IRQHandler()
+{
+		if(DMA_GetITStatus(DMA1_IT_TC1))
+		{
+				TIM_Cmd(TIM3,DISABLE);  
+				DMA_ClearITPendingBit(DMA1_IT_GL1);
+		}
+}
