@@ -46,6 +46,27 @@ static  unsigned short inv_row_2_scale(const signed char *row)
     return b;
 }
 
+static  unsigned short inv_orientation_matrix_to_scalar(const signed char *mtx)
+{
+    unsigned short scalar;
+
+    /*
+       XYZ  010_001_000 Identity Matrix
+       XZY  001_010_000
+       YXZ  010_000_001
+       YZX  000_010_001
+       ZXY  001_000_010
+       ZYX  000_001_010
+     */
+
+    scalar = inv_row_2_scale(mtx);
+    scalar |= inv_row_2_scale(mtx + 3) << 3;
+    scalar |= inv_row_2_scale(mtx + 6) << 6;
+
+
+    return scalar;
+}
+
 struct rx_s 
 {
     unsigned char header[3];
