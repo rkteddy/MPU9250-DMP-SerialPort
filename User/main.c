@@ -11,6 +11,32 @@
 #include "stm32f10x_dma.h"
 #include "stm32f10x_adc.h"
 
+// ×ËÌ¬½Ç
+float Pitch,Roll,Yaw;
+
+// ËÄÔªÊı
+float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;
+
+struct rx_s 
+{
+    unsigned char header[3];
+    unsigned char cmd;
+};
+
+struct hal_s 
+{
+    unsigned char sensors;
+    unsigned char dmp_on;
+    unsigned char wait_for_tap;
+    volatile unsigned char new_gyro;
+    unsigned short report;
+    unsigned short dmp_features;
+    unsigned char motion_int_mode;
+    struct rx_s rx;
+};
+
+static struct hal_s hal = {0};
+
 int main(void)
 {  
     u16 count=0;  
