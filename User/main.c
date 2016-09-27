@@ -87,6 +87,38 @@ struct hal_s
 
 static struct hal_s hal = {0};
 
+static void run_self_test()
+{
+    int result;
+
+    long gyro[3], accel[3];
+
+		// 自检
+    result = mpu_run_self_test(gyro, accel);
+	
+    if (result == 0x7) 
+    {
+				// 自检成功后将数据送入DMP处理
+        float sens;
+        unsigned short accel_sens;
+        mpu_get_gyro_sens(&sens);
+        gyro[0] = (long)(gyro[0] * sens);
+        gyro[1] = (long)(gyro[1] * sens);
+        gyro[2] = (long)(gyro[2] * sens);
+        dmp_set_gyro_bias(gyro);
+        mpu_get_accel_sens(&accel_sens);
+        accel[0] *= accel_sens;
+        accel[1] *= accel_sens;
+        accel[2] *= accel_sens;
+        dmp_set_accel_bias(accel);
+				printf("setting bias succesfully ......\n");
+    }
+		else
+		{
+				printf("bias has not been modified ......\n");
+		}
+}
+
 int main(void)
 {  
     u16 count=0;  
