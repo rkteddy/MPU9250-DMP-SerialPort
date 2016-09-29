@@ -11,6 +11,17 @@
 #include "stm32f10x_dma.h"
 #include "stm32f10x_adc.h"
 
+//相关变量
+unsigned long sensor_timestamp;
+short gyro[3], accel[3], sensors;
+unsigned char more;
+long quat[4];
+
+// 误差纠正
+#define  Pitch_error  1.0
+#define  Roll_error   -2.0
+#define  Yaw_error    0.0
+
 // 姿态角
 float Pitch,Roll,Yaw;
 
