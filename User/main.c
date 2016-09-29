@@ -11,16 +11,24 @@
 #include "stm32f10x_dma.h"
 #include "stm32f10x_adc.h"
 
+#define  Pitch_error  1.0
+#define  Roll_error   -2.0
+#define  Yaw_error    0.0
+#define DEFAULT_MPU_HZ  (100)
+#define FLASH_SIZE      (512)
+#define FLASH_MEM_START ((void*)0x1800)
+#define PAGE_ADDR (0x08000000 + 63 * 1024)
+#define uint8 unsigned char
+#define uint16 unsigned int
+#define uint32 unsigned long
+#define q30  1073741824.0f
+
 //相关变量
 unsigned long sensor_timestamp;
 short gyro[3], accel[3], sensors;
 unsigned char more;
 long quat[4];
 
-// 误差纠正
-#define  Pitch_error  1.0
-#define  Roll_error   -2.0
-#define  Yaw_error    0.0
 
 // 姿态角
 float Pitch,Roll,Yaw;
@@ -148,6 +156,80 @@ int main(void)
 
     // 系统延时
     delay_ms(10);
+	
+		if(!mpu_init())   //返回0代表初始化成功
+    {   
+        if(!mpu_set_sensors(INV_XYZ_GYRO | INV_XYZ_ACCEL))
+        {
+            printf("mpu_set_sensor complete ......\n");
+        }
+        else
+        {
+            printf("mpu_set_sensor come across error ......\n");
+        }
+        
+        // MPU配置FIFO
+        if(!mpu_configure_fifo(INV_XYZ_GYRO | INV_XYZ_ACCEL))
+        {
+            printf("mpu_configure_fifo complete ......\n");
+        }
+        else
+        {
+            printf("mpu_configure_fifo come across error ......\n");
+        }
+        
+        // MPU设置采样率
+        if(!mpu_set_sample_rate(DEFAULT_MPU_HZ))
+        {
+            printf("mpu_set_sample_rate complete ......\n");
+        }
+        else
+        {
+            printf("mpu_set_sample_rate error ......\n");
+        }
+        
+        // 加载DMP驱动固件
+        if(!dmp_load_motion_driver_firmware())
+        {
+            printf("dmp_load_motion_driver_firmware complete ......\n");
+        }
+        else
+        {
+            printf("dmp_load_motion_driver_firmware come across error ......\n");
+        }
+        
+        // DMP设置姿态矩阵
+        if(!dmp_set_orientation(inv_orientation_matrix_to_scalar(gyro_orientation)))
+        {
+            printf("dmp_set_orientation complete ......\n");
+        }
+        else
+        {
+            printf("dmp_set_orientation come across error ......\n");
+        }
+        
+        // DMP启动
+        if(!dmp_enable_feature(DMP_FEATURE_6X_LP_QUAT | DMP_FEATURE_TAP |
+            DMP_FEATURE_ANDROID_ORIENT | DMP_FEATURE_SEND_RAW_ACCEL | DMP_FEATURE_SEND_CAL_GYRO |
+            DMP_FEATURE_GYRO_CAL))
+        {
+            printf("dmp_enable_feature complete ......\n");
+        }
+        else
+        {
+            printf("dmp_enable_feature come across error ......\n");
+        }
+        
+        // DMP设置FIFO速率
+        if(!dmp_set_fifo_rate(DEFAULT_MPU_HZ))
+        {
+           printf("dmp_set_fifo_rate complete ......\n");
+        }
+        else
+        {
+            printf("dmp_set_fifo_rate come across error ......\n");
+        }
+		}
 }
 
 void USART1_IRQHandler()
