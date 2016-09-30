@@ -229,6 +229,23 @@ int main(void)
         {
             printf("dmp_set_fifo_rate come across error ......\n");
         }
+				
+				// 不开自检，以水平作为零度
+        // 开启自检以当前位置作为零度
+        //run_self_test();
+				
+				printf("Adjusting,please wait...");
+				
+				printf("Adjustment complete!");
+				
+				if(!mpu_set_dmp_state(1))
+        {
+            printf("mpu_set_dmp_state complete ......\n");
+        }
+        else
+        {
+            printf("mpu_set_dmp_state come across error ......\n");
+        }
 		}
 }
 
