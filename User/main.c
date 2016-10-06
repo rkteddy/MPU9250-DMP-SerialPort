@@ -247,6 +247,36 @@ int main(void)
             printf("mpu_set_dmp_state come across error ......\n");
         }
 		}
+		
+		while(1)
+    {
+        // 读取DMP
+        dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);
+				
+				// 四元数解姿态
+        if (sensors & INV_WXYZ_QUAT )
+        {
+						float temp;
+            q0 = quat[0] / q30;
+            q1 = quat[1] / q30;
+            q2 = quat[2] / q30;
+            q3 = quat[3] / q30;
+            
+            Pitch  = asin(-2 * q1 * q3 + 2 * q0 * q2) * 57.3 + Pitch_error; // pitch
+            Roll = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1) * 57.3 + Roll_error; // roll
+            Yaw = atan2(2 * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3) * 57.3 + Yaw_error;
+            printf("Roll:");
+            temp = (Roll);
+            printf("%.2f ",temp);
+            printf("Pitch:");
+            temp = (Pitch);
+            printf("%.2f ",temp);
+            printf("Yaw:");
+            temp = (Yaw);
+            printf("%.2f",temp);
+            printf("Force:");
+				}
+    }
 }
 
 void USART1_IRQHandler()
