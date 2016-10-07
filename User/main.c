@@ -288,13 +288,53 @@ int main(void)
             Yaw = atan2(2 * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3) * 57.3 + Yaw_error;
             printf("Roll:");
             temp = (Roll);
-            printf("%.2f ",temp);
+            printf("%.2f ",temp - rx);
             printf("Pitch:");
             temp = (Pitch);
-            printf("%.2f ",temp);
+            printf("%.2f ",temp - ry);
             printf("Yaw:");
             temp = (Yaw);
             printf("%.2f",temp);
+				}
+				
+				// 置零键被按下
+				if(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5))
+				{
+						delay_ms(500);
+						if(!GPIO_ReadInputDataBit(GPIOA, GPIO_Pin_5))
+						{
+								printf("Start adjusting, Please wait...\n");
+								
+								// 保存Flash配置
+								if (Roll < 0)
+										r[0] = 0;
+								else
+										r[0] = 1;
+								r[1]=Roll*100;
+								
+								if (Pitch < 0)
+										r[2] = 0;
+								else
+										r[2] = 1;
+								r[3]=Pitch*100;
+
+								STMFLASH_Write(0, (u16*)r, sizeof(r));
+								STMFLASH_Read(0, (u16*)r, sizeof(r));
+								
+								if (r[0] == 0)
+										rx = -(float)r[1] / 100;
+								else
+										rx = (float)r[1] / 100;
+								if (r[2] == 0)
+										ry = -(float)r[3] / 100;
+								else 
+										ry = (float)r[3] / 100;
+								
+								//run_self_test();
+								LED_Flash();
+								printf("Succeed!\n");
+								printf("rx = %.2f, ry = %.2f",rx, ry);
+						}
 				}
     }
 }
