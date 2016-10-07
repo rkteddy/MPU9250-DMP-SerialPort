@@ -29,6 +29,14 @@ short gyro[3], accel[3], sensors;
 unsigned char more;
 long quat[4];
 
+// 设定出厂偏差值
+float rx = 0;
+float ry = 0;
+
+// 姿态角数据保存值
+// r[0/2]表示姿态角正负
+// r[1/3]表示姿态角*100（保存小数点后两位）
+u16 r[4]={0};
 
 // 姿态角
 float Pitch,Roll,Yaw;
@@ -274,7 +282,6 @@ int main(void)
             printf("Yaw:");
             temp = (Yaw);
             printf("%.2f",temp);
-            printf("Force:");
 				}
     }
 }
