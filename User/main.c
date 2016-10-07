@@ -244,6 +244,19 @@ int main(void)
 				
 				printf("Adjusting,please wait...");
 				
+				// 读取Flash中保存的配置
+				STMFLASH_Read(0, (u16*)r, sizeof(r));
+				if (r[0] == 0)
+						rx = -(float)r[1] / 100;
+				else
+						rx = (float)r[1] / 100;
+				if (r[2] == 0)
+						ry = -(float)r[3] / 100;
+				else 
+						ry = (float)r[3] / 100;
+				
+				printf("rx = %.2f, ry = %.2f",rx, ry);
+				
 				printf("Adjustment complete!");
 				
 				if(!mpu_set_dmp_state(1))
