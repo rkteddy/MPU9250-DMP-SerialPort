@@ -29,6 +29,10 @@ short gyro[3], accel[3], sensors;
 unsigned char more;
 long quat[4];
 
+// ADC
+__IO u16 ADC_ConvertedValue;
+float ADC_ConvertedValueLocal;
+
 // 设定出厂偏差值
 float rx = 0;
 float ry = 0;
@@ -286,6 +290,11 @@ int main(void)
             Pitch  = asin(-2 * q1 * q3 + 2 * q0 * q2) * 57.3 + Pitch_error; // pitch
             Roll = atan2(2 * q2 * q3 + 2 * q0 * q1, -2 * q1 * q1 - 2 * q2* q2 + 1) * 57.3 + Roll_error; // roll
             Yaw = atan2(2 * (q1 * q2 + q0 * q3), q0 * q0 + q1 * q1 - q2 * q2 - q3 * q3) * 57.3 + Yaw_error;
+					
+					 // 输出adc得到的电压，假设电源电压稳定3v3
+						ADC_ConvertedValueLocal=(float) ADC_ConvertedValue/4096*3.3;
+						printf("%.2f\n",ADC_ConvertedValueLocal);
+					
             printf("Roll:");
             temp = (Roll);
             printf("%.2f ",temp - rx);
@@ -336,6 +345,11 @@ int main(void)
 								printf("rx = %.2f, ry = %.2f",rx, ry);
 						}
 				}
+				
+        /*if(sensors & INV_XYZ_GYRO)
+        {}
+        if(sensors & INV_XYZ_ACCEL)
+        {}*/
     }
 }
 
