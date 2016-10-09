@@ -273,8 +273,26 @@ int main(void)
         }
 		}
 		
+		// LED闪烁示意开启
+		LED_Flash();
+		
 		while(1)
     {
+				// 灯亮灭代表正在运行状态
+        count ++;          
+        if(count < 100)
+        {
+            led_on;  
+        }
+        else if(count < 200)
+        {
+            led_off;  
+        }
+        else if(count == 200)
+        {
+            count = 0; 
+        }
+				
         // 读取DMP
         dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors, &more);
 				
